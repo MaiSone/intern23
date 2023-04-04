@@ -1,0 +1,40 @@
+.switchArea {
+  position: relative;
+  width: 36px;               
+  height: 18px;
+  background: #F9f1e4;
+}
+
+.switchArea input[type="checkbox"] {
+  display        : none;
+}
+
+.switchArea label {
+  display: block;               
+  box-sizing: border-box;
+  height: 18px; 
+  border: 2px solid #999999;
+  background: #999999;
+  border-radius  : 30px;
+
+}
+
+.switchArea input[type="checkbox"]:checked +label {
+  border-color   : #254868;
+  background: #254868;
+}
+.switchArea #switchImg {
+  position       : absolute;            
+  width          : 14px;              
+  height         : 14px;
+  background     : #fff;
+  top            : 2px;
+  left           : 2px; 
+  border-radius  : 26px;
+  transition     : .2s; 
+}
+
+.switchArea input[type="checkbox"]:checked ~ #switchImg {
+  transform      : translateX(18px);
+  background     : #fff;
+}

@@ -1,0 +1,119 @@
+/* スマホ */
+@media screen and (max-width: 480px) {
+    /* slider*/
+    .switch{
+    display: flex;
+    flex-direction: column;
+    }
+    .sliderErea{
+    height: 30px;
+    width: 100%;
+    }
+    input[type="range"]{
+    vertical-align: middle;
+    }
+    /* modal */
+    div.simple-popup-content{
+    width: 300px;
+    height: auto;
+    }
+    div.swiper-slide{
+    width: 100%;
+    max-width: 480px;
+    }
+    div.swiper-slide .ptag{
+    margin-block-start: initial;
+    line-height: initial;
+    }
+    div.swiper-slide p{
+    margin-block-start: 0px;
+    line-height: 20px;
+    width: 280px;
+    word-break: normal;
+    }
+    /* video */
+    video{
+    width: 200px;
+    height: auto;
+    padding-bottom: 35px;
+    margin-top: 10px;
+    margin-left: 40px;
+    margin-right: 40px;
+    }
+}
+/* category・sliderエリア */
+.switch{
+display: flex;
+width: 100%; 
+justify-content: space-evenly;
+}
+/* sliderエリア */
+.sliderLabel{
+font-size: 14px;
+color: #666;
+line-height: 1.2;
+}
+.sliderErea{
+height: 30px;
+}
+/* slider本体 */
+input[type="range"] {
+width: 120px; /* 幅 */
+}
+
+/* 余計なsliderの要素を消す */
+.slider-nav{
+display: none;
+}
+.slide-up{
+display:none;
+}
+.slide-down{
+display:none;
+}
+/* modal */
+div.simple-popup-content{
+max-width: 450px;
+max-height: 555px;
+padding: 15px 10px 15px 10px;
+}
+div.swiper-slide{
+width: 100%;
+}
+div.swiper-slide .ptag{
+margin-block-start: initial;
+margin-top: initial;
+line-height: initial;
+}
+div.swiper-slide p{
+margin-block-start: 0px;
+margin-top: 0px;
+line-height: 20px;
+font-size: 14px;
+max-width: 430px;
+word-break: normal;
+}
+/*  modalIE対応 */
+@media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+    /* modalなくす */
+    footer#modal{
+    display: none;
+    }
+}
+/*  modalSafari対応 */
+::-webkit-full-page-media, :future, :root footer#modal{
+/* modalなくす */
+display: none;
+}
+/* video */
+@media screen and (min-width: 480px) {
+    video{
+    width: 80%;
+    max-width: 280px;
+    height: auto;
+    padding-bottom: 35px;
+    margin-top: 10px;
+    margin-left: 75px;
+    margin-right: 75px; 
+    }
+}

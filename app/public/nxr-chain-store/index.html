@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<body>
+    <article>
+        <div class="articleBody" style="width: 650px;">
+            
+            <!-- 業種 -->
+            <div id="vis-category">
+                <a class="list-category" data-category="vis-fastfood" data-atlas-trackable="vis_category"
+                    onclick="categoryFilter(this)">
+                    ファストフード
+                </a>
+                <a class="list-category" data-category="vis-gyudon" data-atlas-trackable="vis_category"
+                    onclick="categoryFilter(this)">
+                    牛丼
+                </a>
+                <a class="list-category" data-category="vis-sushi" data-atlas-trackable="vis_category"
+                    onclick="categoryFilter(this)">
+                    回転ずし
+                </a>
+                <a class="list-category" data-category="vis-restaurant" data-atlas-trackable="vis_category"
+                    onclick="categoryFilter(this)">
+                    ファミレス
+                </a>
+                <a class="list-category" data-category="vis-drugstore" data-atlas-trackable="vis_category"
+                    onclick="categoryFilter(this)">
+                    ドラッグストア
+                </a>
+                <a class="list-category" data-category="vis-cvs" data-atlas-trackable="vis_category"
+                    onclick="categoryFilter(this)">
+                    コンビニ
+                </a>
+                <a class="list-category" data-category="vis-suits" data-atlas-trackable="vis_category"
+                    onclick="categoryFilter(this)">
+                    紳士服
+                </a>
+                <a class="list-category" data-category="vis-apparel" data-atlas-trackable="vis_category"
+                    onclick="categoryFilter(this)">
+                    アパレル
+                </a>
+                <a class="list-category" data-category="vis-furniture" data-atlas-trackable="vis_category"
+                    onclick="categoryFilter(this)">
+                    家具・ホームセンター
+                </a>
+                <a class="list-category" data-category="vis-100yen" data-atlas-trackable="vis_category"
+                    onclick="categoryFilter(this)">
+                    100円ショップ
+                </a>
+            </div>
+            <!-- /業種 -->
+
+            <!-- グラフと表 -->
+            <div class="vis-toggle vis-fastfood">
+                <button class="btn-chart table-chart-toggle">グラフ</button>
+                <button class="btn-table table-chart-toggle">表</button>
+                <div class="vis-table"></div>
+                <div class="vis-chart" data-datacsv="fastfood.csv"></div>
+            </div>
+
+            <div class="vis-toggle vis-gyudon">
+                <button class="btn-chart table-chart-toggle">グラフ</button>
+                <button class="btn-table table-chart-toggle">表</button>
+                <div class="vis-table"></div>
+                <div class="vis-chart" data-datacsv="gyudon.csv"></div>
+            </div>
+
+            <div class="vis-toggle vis-sushi">
+                <button class="btn-chart table-chart-toggle">グラフ</button>
+                <button class="btn-table table-chart-toggle">表</button>
+                <div class="vis-table"></div>
+                <div class="vis-chart" data-datacsv="sushi.csv"></div>
+            </div>
+
+            <div class="vis-toggle vis-restaurant">
+                <button class="btn-chart table-chart-toggle">グラフ</button>
+                <button class="btn-table table-chart-toggle">表</button>
+                <div class="vis-table"></div>
+                <div class="vis-chart" data-datacsv="restaurant.csv"></div>
+            </div>
+
+            <div class="vis-toggle vis-drugstore">
+                <button class="btn-chart table-chart-toggle">グラフ</button>
+                <button class="btn-table table-chart-toggle">表</button>
+                <div class="vis-table vertical-header"></div>
+                <div class="vis-chart" data-datacsv="drugstore.csv"></div>
+            </div>
+
+            <div class="vis-toggle vis-cvs">
+                <button class="btn-chart table-chart-toggle">グラフ</button>
+                <button class="btn-table table-chart-toggle">表</button>
+                <div class="vis-table"></div>
+                <div class="vis-chart" data-datacsv="cvs.csv"></div>
+            </div>
+
+            <div class="vis-toggle vis-suits">
+                <button class="btn-chart table-chart-toggle">グラフ</button>
+                <button class="btn-table table-chart-toggle">表</button>
+                <div class="vis-table"></div>
+                <div class="vis-chart" data-datacsv="suits.csv"></div>
+            </div>
+
+            <div class="vis-toggle vis-apparel">
+                <button class="btn-chart table-chart-toggle">グラフ</button>
+                <button class="btn-table table-chart-toggle">表</button>
+                <div class="vis-table"></div>
+                <div class="vis-chart" data-datacsv="apparel.csv"></div>
+            </div>
+
+            <div class="vis-toggle vis-furniture">
+                <button class="btn-chart table-chart-toggle">グラフ</button>
+                <button class="btn-table table-chart-toggle">表</button>
+                <div class="vis-table"></div>
+                <div class="vis-chart" data-datacsv="furniture.csv"></div>
+            </div>
+
+            <div class="vis-toggle vis-100yen">
+                <button class="btn-chart table-chart-toggle">グラフ</button>
+                <button class="btn-table table-chart-toggle">表</button>
+                <div class="vis-table"></div>
+                <div class="vis-chart" data-datacsv="100yen.csv"></div>
+            </div>
+
+
+            <!-- ライブラリ読み込み -->
+            <script src="/js/bpcommon/jquery-3.x.min.js"></script>
+            <script src="/js/bpcommon/visualdata/Chart.min.js"></script>
+            <script src="/js/bpcommon/visualdata/chartjs-plugin-datalabels.min.js"></script>
+            <script src="/js/bpcommon/visualdata/nxr-chain-store.js"></script>
+            <link rel="stylesheet" href="/css/visualdata/nxr-chain-store.css">
+        </div>
+
+    </article>
+</body>
+
+</html>

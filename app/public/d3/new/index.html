@@ -1,0 +1,31 @@
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@3.0/dist/vuetify.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://cdn.jsdelivr.net/npm/vue@3.2/dist/vue.esm-browser.prod.js",
+        "vuetify": "https://cdn.jsdelivr.net/npm/vuetify@3.0/dist/vuetify.esm.min.js",
+		"d3":"https://d3js.org/d3.v7.min.js"
+      }
+    }
+  </script>
+
+  <div id="app"></div>
+
+  <script type="module">
+    import { createApp, ref } from 'vue';
+    import { createVuetify } from 'vuetify';
+    import * as d3 from 'd3';
+    import App from './app.js';
+
+    const vuetify = createVuetify();
+    const app = createApp(App);
+    app.use(vuetify);
+    app.mount('#app');
+  </script>
+</body>

@@ -1,0 +1,2 @@
+type,stacked,colorTheme,responsive,chartWidth,chartHeight,titleDisplay,titleText,legendDisplay,datalabelDisplay,datalabelColor,datalabelAnchor,datalabelAlign,datalabelClamp,datalabelFontSize,datalabelOffset,paddingTop,paddingRight,tooltipEnabled,lineTension,pointRadius,division,unit,scaleLabelDisplayxAxes,scaleLabelLabelStringxAxes,scaleLabelDisplayyAxes,scaleLabelLabelStringyAxes
+line,false,default,true,650,500,false,テンプレート化しています,true,false,#000000,end,end,true,12,0,0,0,true,0,0,1,%,true,,true,売上高 前年同月比

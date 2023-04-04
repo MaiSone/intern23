@@ -1,0 +1,18 @@
+version: '3.3'
+services:
+  web:
+    image: node:12
+    volumes:
+      - ./app:/root/app
+    working_dir: /root/app
+    command: >
+      bash -c 'npm install &&
+      mkdir -p public/js/bpcommon/visualdata &&
+      cp node_modules/jquery/dist/jquery.min.js public/js/bpcommon/jquery-3.x.min.js &&
+      cp node_modules/chart.js/dist/Chart.min.js public/js/bpcommon/visualdata/Chart.min.js &&
+      cp node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js public/js/bpcommon/visualdata/chartjs-plugin-datalabels.min.js &&
+      npm start
+      '
+
+    ports:
+      - "3000:3000"

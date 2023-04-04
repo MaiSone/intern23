@@ -1,0 +1,61 @@
+<html>
+
+<head>
+</head>
+
+<body>
+    <article>
+        <div class="articleBody" style="width: 650px;">
+
+<div class="switch">
+    <div class="category">
+        <span>カテゴリー</span>
+        <select name="" id="categorySwitch">
+            <option value="全て">全て</option>
+            <option value="マーケ">マーケティング</option>
+            <option value="技術">テクノロジー</option>
+            <option value="消費">消費トレンド</option>
+        </select> 
+    </div>
+    <div class="sliderErea">
+        <span>調査時期</span>
+        <span class="sliderLabel">18下半期</span>
+        <input id="slider" type="range" min="0" max="7" step="1" value="7">
+        <span class="sliderLabel">22上半期</span>
+    </div>
+</div>
+
+<div class="textAlignCenter">
+    <p id="keywordDescArea" class="sliderLabel"></p>
+</div>
+<div>
+    <canvas id="bpChart" width="400" height="360"></canvas>
+</div>
+<div>     
+    <span>
+        <button id="reloadButton" style="visibility: hidden; border: none; width: 140px; height: 38px; padding: 0px 20px 0px 20px;">
+            <i class="icon icon-left-arrow"></i>
+            <span>一覧に戻る</span>
+        </button>
+    </span>
+    <span>
+        <a id="searchLink" href="/atcl/search/?KEYWORD=" target="_blank"
+            style="visibility:hidden">
+            関連記事を探す
+        </a>
+    </span>
+</div>
+
+
+<script src="/js/bpcommon/visualdata/Chart.min.js"></script>
+<script src="/js/bpcommon/visualdata/chartjs-plugin-datalabels.min.js"></script>
+
+<script src="scatter.js"></script>
+<link rel="stylesheet" href="scatter.css">
+
+        </div>
+    </article>
+
+</body>
+
+</html>

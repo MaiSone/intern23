@@ -1,0 +1,21 @@
+{
+  "name": "bpchart",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "chart.js": "^2.9.4",
+    "chartjs-plugin-datalabels": "^1.0.0",
+    "jquery": "^3.5.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^3.1.2",
+    "express": "^4.17.1",
+    "sass": "^1.58.2",
+    "serve-index": "^1.9.1",
+    "vite-plugin-vuetify": "^1.0.2",
+    "vuetify": "^3.1.4"
+  }
+}

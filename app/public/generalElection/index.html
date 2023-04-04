@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- <link href="http://fonts.googleapis.com/earlyaccess/notosansjp.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo&display=swap" rel="stylesheet"> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/1.1.1/chartjs-plugin-zoom.min.js"></script> -->
+    <script src="generalElection.js" defer></script>
+    <style type="text/css">
+        base {
+            font-feature-settings: "palt";
+            font-kerning: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: geayscale;
+            letter-spacing: 0.04em;
+        }
+        /* Style the tab */
+        .tab {
+        overflow: hidden;
+        border: 1px solid #d32f2f;
+        background-color: #fff;
+        }
+
+        /* Style the buttons that are used to open the tab content */
+        .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+        background-color: #fff;
+        color: #d32f2f;
+        font-weight: bold;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+        background-color: #d32f2f;
+        color: #fff;
+        font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="base">
+        <div class="tab">
+            <button class="tablinks" id="default" onclick="voteCount(event, 'lowerHouse')" data-atlas-trackable="vis_link">衆院選参院選<br>過去6回<br>平均投票率</button>
+            <button class="tablinks" onclick="voteCount(event, '2019')" data-atlas-trackable="vis_link">2019<br>参院選<br>投票率</button>
+            <button class="tablinks" onclick="voteCount(event, '2017')" data-atlas-trackable="vis_link">2017<br>衆院選<br>投票率</button>
+            <button class="tablinks" onclick="voteCount(event, '2016')" data-atlas-trackable="vis_link">2016<br>参院選<br>投票率</button>
+            <button class="tablinks" onclick="voteCount(event, '2014')" data-atlas-trackable="vis_link">2014<br>衆院選<br>投票率</button>
+            <button class="tablinks" onclick="voteCount(event, '2013')" data-atlas-trackable="vis_link">2013<br>参院選<br>投票率</button>
+            <button class="tablinks" onclick="voteCount(event, '2012')" data-atlas-trackable="vis_link">2012<br>衆院選<br>投票率</button>
+        </div>
+        
+        <canvas id="chart"></canvas>
+    </div>
+    
+</body>
+</html>
+
+
+
+
+
+
+

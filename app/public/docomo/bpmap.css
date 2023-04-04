@@ -1,0 +1,266 @@
+#map {
+    position: relative;
+    height: 0;
+    padding-top: 100%;
+    background: url('japan.png') 0 0 no-repeat;
+    background-size: contain;
+}
+
+.map-info-box {
+    position: absolute;
+    top: 1%;
+    left: 5%;
+    font-size: 20px;
+    font-weight: bold;
+    color: #254868;
+}
+
+/* PC */
+
+@media (min-width: 600px) {
+
+    .l-article {
+        width: auto;
+      }
+    
+    .bpvis {
+        width: 100%;
+        display: table;
+        table-layout: fixed;
+    }
+    
+    #map, #chartArea {
+        display: table-cell;
+        vertical-align: top;
+    }
+    
+    #map {
+        position: relative;
+        height: 0;
+        padding-top: 100%;
+        background: url('japan.png') 0 0 no-repeat;
+        background-size: contain;
+    }
+    
+    #map {
+        background-position: top;
+        background-color: #f9f1e4;
+        padding: 0;
+    }
+    .map-info-box {
+        left: 25%;
+    }
+
+    #maplink {
+        display: none;
+    }
+}
+
+/* SP */
+
+@media (max-width: 599px) {
+    .pc {
+        display: none;
+    }
+}
+
+/* PC */
+
+@media (min-width: 600px) {
+    .sp {
+        display: none;
+    }
+}
+
+/* エリアボタン */
+
+.map-area-button {
+    cursor: pointer;
+    background: #FFF;
+    padding: 0px 5px 0px 5px;
+    color: #254868;
+    border: solid 3px #254868;
+    border-radius: 10px;
+    max-width: 650px;
+    max-height: 650px;
+    padding: 0 1rem 0 1rem;
+    font-size: 15px;
+}
+
+.static-hokkaido {
+    position: absolute;
+    top: 15%;
+    right: 10%;
+}
+
+.static-touhoku {
+    position: absolute;
+    top: 35%;
+    right: 21%;
+}
+
+.static-kanto {
+    position: absolute;
+    top: 50%;
+    right: 12%;
+}
+
+.static-chubu {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+}
+
+.static-kansai {
+    position: absolute;
+    top: 65%;
+    right: 29%;
+}
+
+.static-chugoku {
+    position: absolute;
+    top: 67%;
+    left: 14%;
+}
+
+.static-kyushu {
+    position: absolute;
+    top: 83%;
+    left: 2%;
+}
+
+/* PC エリアボタン */
+
+@media (min-width: 600px) {
+    .static-hokkaido {
+        top: 19%;
+        right: 6%;
+    }
+    .static-touhoku {
+        top: 42%;
+        right: 14%;
+    }
+    .static-kanto {
+        top: 53%;
+        right: 1%;
+    }
+    .static-chubu {
+        top: 10%;
+        right: 49%;
+    }
+    .static-kansai {
+        top: 33%;
+        right: 55%;
+    }
+    .static-chugoku {
+        top: 61%;
+        left: 12%;
+    }
+    .static-kyushu {
+        top: 87%;
+        left: 20%;
+    }
+    .static-okinawa {
+        position: absolute;
+        top: 87%;
+        left: 59.5%;
+    }
+    .map-area-group {
+        display: none;
+    }
+}
+
+/* 閉じるボタン */
+
+/* .area-group-close {
+    display: inline-block;
+    color: #254868;
+    font-size: 44px;
+    text-align: center;
+    content: "\00d7";
+} */
+
+.area-group-close {
+    position: absolute;
+    display: block;
+    width: 44px;
+    height: 44px;
+    top: 0px;
+    right: -9px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.area-group-close::before {
+    display: inline-block;
+    color: #254868;
+    font-size: 44px;
+    text-align: center;
+    content: "\00d7";
+}
+
+.header-global-menu .global-menu-block {
+    margin: 16px 0 0 0;
+    width: 456px;
+}
+
+/* エリア一覧 */
+
+.area-kanto {
+    display: none;
+    position: absolute;
+    bottom: 0%;
+    right: 0%;
+    margin: 0px 10px 0px 10px;
+    background: #FFF;
+    box-shadow: 0px 3px 6px 0px #000000;
+    color: #254868;
+    border: solid 3px #254868;
+    border-radius: 5px;
+    padding: 1.5rem .5rem .5rem .5rem;
+    box-sizing: border-box;
+}
+
+.area-chubu {
+    display: none;
+    position: absolute;
+    bottom: 15%;
+    left: 20%;
+    margin: 0px 10px 0px 10px;
+    background: #FFF;
+    box-shadow: 0px 3px 6px 0px #000000;
+    color: #254868;
+    border: solid 3px #254868;
+    border-radius: 5px;
+    padding: 1.5rem .5rem .5rem .5rem;
+    box-sizing: border-box;
+}
+
+.area-kansai {
+    display: none;
+    position: absolute;
+    bottom: 20%;
+    left: 20%;
+    margin: 0px 10px 0px 10px;
+    background: #FFF;
+    box-shadow: 0px 3px 6px 0px #000000;
+    color: #254868;
+    border: solid 3px #254868;
+    border-radius: 5px;
+    padding: 1.5rem .5rem .5rem .5rem;
+    box-sizing: border-box;
+}
+
+.area-kyushu {
+    display: none;
+    position: absolute;
+    bottom: 10%;
+    margin: 0px 10px 0px 10px;
+    background: #FFF;
+    box-shadow: 0px 3px 6px 0px #000000;
+    color: #254868;
+    border: solid 3px #254868;
+    border-radius: 5px;
+    padding: 1.5rem .5rem .5rem .5rem;
+    box-sizing: border-box;
+}

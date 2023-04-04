@@ -1,0 +1,109 @@
+.vis-container {
+}
+.vis-hidden {
+  display: none;
+}
+.vis-table {
+  clear: both;
+  overflow-x: scroll;
+}
+.vis-tableBody {
+  width: 1000px;/*IE11*/
+  width: max-content;
+  font-size: 14px;
+  border-right: solid 1px #ccc;
+  border-left: solid 1px #ccc;
+}
+.vis-tableBody th {
+  border-bottom: solid 2px #666;
+}
+.vis-tableBody th,
+.vis-tableBody td {
+  width: auto;
+  max-width: 300px;
+  padding: 6px;
+  border-right: 1px solid #ddd;
+}
+.vis-tableBody tr{
+  border-bottom: solid 1px #ccc;
+  background: #fff6ee;
+}
+.vis-tableBody tr:nth-child(odd) {
+  background: #fff;
+}
+/* .vis-tableBody tr:hover{
+  background-color: #fff0f0;
+} */
+.vis-tableBody th > div {
+  display: inline-block;
+  position: relative;
+  height: 25px;
+  width: 20px;
+  margin: 0 0 0 5px;
+  vertical-align: middle;
+}
+.vis-sort-up {
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+  background-color: #fbfbfb;
+  display: inline-block;
+  width: 20px;
+  margin: 0;
+  line-height: 1;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 12px;
+}
+.vis-sort-down {
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+  background-color: #fbfbfb;
+  display: inline-block;
+  width: 20px;
+  margin: 0;
+  line-height: 1;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 12px;
+}
+.vis-left,.vis-right {
+  font-size: 20px;
+  width: 30px;
+  line-height: 1.6;
+  background-color: #0b7984;
+  color: #fff;
+  font-weight: bold;
+  position: sticky;
+  top: 400px;
+  border-radius: 2px;
+  display: block;
+  z-index: 1;
+}
+.vis-left {
+  margin: 0;
+}
+.vis-right {
+  margin: -30px 0 0 calc( 100% - 30px );
+}
+.vis-more-button {
+  margin: 7px auto 0px;
+  display: block;
+  padding: 6px 20px 3px;
+  background-color: #14838e;
+  border-radius: 2px;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+}
+
+/*  個別の幅調整用
+.vis-tableBody th:nth-child(2) {
+  width: 75px;
+}
+*/

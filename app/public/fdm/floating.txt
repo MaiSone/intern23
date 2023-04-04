@@ -1,0 +1,607 @@
+// MIT License
+
+// Copyright (c) 2020 Yu Fukuda, Risa Furushima, Mai Sone
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+// Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+// WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+// COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+//フォント読み込み
+loadFonts();
+//地点・csvファイル名特定、
+const defaultCode = defaultCodeFunc();
+//csvファイル読み込み
+load(defaultCode);
+
+//NotoSansJP,Heeboの追加
+async function loadFonts() {
+    const NotoSansJP = new FontFace('Noto Sans JP', 'url(/css/nfm/2021/fonts/Noto_Sans_JP/NotoSansJP-Regular.otf)', { style: 'normal', weight: 700});
+    const Heebo = new FontFace('Heebo', 'url(/css/nfm/2021/fonts/Noto_Sans_JP/NotoSansJP-Regular.otf)', { style: 'normal', weight: 700});
+    // wait for font to be loaded
+    await NotoSansJP.load();
+    await Heebo.load();
+    // add font to document
+    document.fonts.add(NotoSansJP);
+    document.fonts.add(Heebo);
+}
+
+//選択されている地点
+function defaultCodeFunc() {
+    const option = document.getElementById('csv');//プルダウン
+    if(location.hash) { //アンカーリンクあり
+        var hash = location.hash;
+        var defaultCode = hash.replace("#", "");
+        // console.log(defaultCode);
+        const options = option.options;
+        for(var i = 0; i < options.length; i++){
+            if(options[i].value == defaultCode) {
+                options[i].selected = true;
+            };
+        }
+    } else { //アンカーリンクなし
+        const selectOption = option.selectedIndex;
+        var defaultCode = option.options[selectOption].value;
+        // console.log(selectOption);
+    }
+    return defaultCode;
+}
+
+// csvファイルを読み込む
+function load(defaultCode) {
+    // ajaxでCSVファイルをロード
+    var req = new XMLHttpRequest();
+    var filePath = [defaultCode + '.csv'];
+    req.open("GET", filePath, true);
+    req.responseType = 'text';
+
+    req.onload = function () {
+        // CSVデータ変換の呼び出し
+        const data = csv2json(req.responseText);
+        // データセット
+        const datasets = generateDataset(data);
+        // ラベル
+        const labels = generateLabel(data);
+        // tooltip用ラベル
+        const tooltiplabels = generateTooltipLabel(data);
+        // y軸の軸線を軸目盛のある地点でだけ出すための色の配列を作成
+        const gridcolor = labels.map(function(label) {
+            if(label != '') {
+                return '#EAEAEA';
+            } else {
+                return '#fff';
+            }
+        });
+        // グラフ描画
+        drawLineChart(datasets, labels, tooltiplabels, gridcolor);
+        //凡例のDOM
+        generateLegend(data);
+        //軸ラベルのDOM
+        drawAxesLabel();
+        //プルダウン変更時
+        change();
+    }
+    req.send(null);
+}
+
+//CSVから２次元配列に変換
+function csv2json(csvArray) {
+    // console.log(csvArray);
+    var jsonArray = [];
+    var rows = csvArray.split(/\r?\n/); //改行で区切る
+    // var columnName = rows[0].split(","); // 1行目から「項目名」の配列を生成する
+
+    const columnLength = rows[0].split(",").length;
+    // console.log(columnLength)f
+    const columnName = [];
+    columnName[0] = 'label';
+    columnName[1] = 'tooltiplabel';
+    for(var n = 2; n < columnLength; n++){
+        columnName[n] = `data${n - 2}`;
+    }
+
+    for (var i = 0; i < rows.length; i++) { //行数の分繰り返す
+        var row = new Array();
+        var cells = rows[i].split(",");
+        for (var n = 0; n < columnName.length; n++) { //列数の分繰り返す
+            row[columnName[n]] = cells[n];
+        }
+        jsonArray.push(row);
+    }
+    // console.log(jsonArray);
+    return jsonArray;
+
+}
+
+//データセット生成
+function generateDataset(jsonArray){
+
+    const legendlabels = [];
+    for(var n = 0; n < Object.keys(jsonArray[0]).length - 2; n++){//基準階xx坪以上があったら
+        if(jsonArray[0]['data'+ n] !== ''){
+            legendlabels.push(jsonArray[0]['data'+ n]);
+        }
+    }
+
+    const floating = [];
+    for(var n = 0; n < Object.keys(jsonArray[1]).length - 2; n++){//データ数（data0,data1...）分繰り返し
+        const chartdata = [];
+        for(var i = 1; i < jsonArray.length; i++){
+            chartdata.push(jsonArray[i][`data${n}`]);
+            chartdata.map(Number);//文字列から数字に変換
+        }
+        floating.push(chartdata);
+    }
+    
+    const datasets = [];
+    for(var l = 0; l < legendlabels.length; l++){
+        
+        const backgroundColor = getColorCode(colorTheme, l);
+        const borderColor = getColorCode(colorTheme, l);
+
+        const floatingdata = [];
+        for(var i = 1; i < jsonArray.length - 1; i++){
+            floatingdata.push([floating[2*l][i], floating[2*l+1][i]]);
+        }
+
+        const dataObject = {
+            label: legendlabels[l],
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            data: floatingdata
+        };
+        datasets.push(dataObject);
+    }  
+    return datasets;
+}
+
+//ラベル生成
+function generateLabel(jsonArray){
+    var labels = [];
+    //作った配列に入れる
+    for(var i = 2; i < jsonArray.length; i++){
+        labels.push(jsonArray[i].label);
+    }
+    // console.log(labels)
+    return labels;
+}
+//ツールチップラベル生成
+function generateTooltipLabel(jsonArray){
+    var tooltiplabels = [];
+    for(var i = 2; i < jsonArray.length; i++){
+        tooltiplabels.push(jsonArray[i].tooltiplabel);
+    }
+    // console.log(tooltiplabels);
+    return tooltiplabels;
+}
+
+//カラーテーマの指定
+const colorTheme = 'default';
+//カラーコード
+const colorCode = {
+    'default': ['#596DB8', '#52A69F', '#EDB444', '#D4628B', '#99AD4A', '#7E522E', '#57A9D7', '#A15CB9', '#E0792E', '#A57667'],
+    'notSelected': ['rgb(89,109,184,0.25)', 'rgba(82,166,159,0.25)', 'rgb(237,180,68,0.25)', 'rgb(212,98,139,0.25)', 'rgb(153,173,74,0.25)', 'rgb(126,82,46,0.25)', 'rgb(87,169,215,0.25)', 'rgb(161,92,185,0.25)', 'rgb(224,121,46,0.25)', 'rgb(165,118,103,0.25)'],
+};
+//カラーテーマ
+function getColorCode(theme, n) {
+    n -= 0 // data.csvのforは0が初期値
+    let colorCodeLength = colorCode[theme].length;
+    let i = n.toString(colorCodeLength);
+    return colorCode[theme][i.substring(i.length -1, i.length - 0)];
+};
+
+//凡例描画
+function generateLegend(jsonArray){
+    const legendlabels = [];
+    for(var i = 0; i < Object.keys(jsonArray[0]).length - 2; i++){
+        if(jsonArray[0]['data'+ i] !== ''){
+                legendlabels.push(jsonArray[0]['data'+ i]);
+        }
+    }
+    // console.log(legendlabels);
+    var div = document.createElement('div');
+    div.setAttribute('style', 'display:flex; margin-right:12;');
+    div.setAttribute('class', 'flag');
+    var base = document.querySelector('.base');
+    var flag = document.querySelector('.flag');
+    if(flag == null){
+        document.querySelector('.articleBody').insertBefore(div, base);
+    } else {
+        var parent = flag.parentNode;
+        parent.replaceChild(div, flag);
+    }
+    for(let i = 0; i < legendlabels.length; i++){
+        const backgroundColor = getColorCode('default', i);
+        var legend = document.createElement('div');
+        legend.setAttribute('style', `background:${backgroundColor}; width:15px; height:15px; margin:3px; font-family: 'Noto Sans JP', sans-serif;`);
+        legend.setAttribute('onclick', `reBuildChart(${i})`);
+        legend.setAttribute('class', `data${i}`);
+        div.appendChild(legend);
+        var label = document.createElement('div');
+        label.setAttribute('style', `font-family: 'Noto Sans JP', sans-serif; font-size:14px;`);
+        label.textContent = legendlabels[i];
+        div.appendChild(label);
+    }
+}
+
+//軸ラベル描画
+function drawAxesLabel(){
+    var div = document.createElement('div');
+    div.setAttribute('style', `color: #666666; font-family: 'Noto Sans JP', sans-serif; font-size:12px; margin-top:12px`);
+    var base = document.querySelector('.base');
+    document.querySelector('.articleBody').insertBefore(div, base);
+    div.textContent = base.dataset.visAxesLabel;
+}
+
+//グラフ描画
+function drawLineChart(datasets, labels, tooltiplabels, gridcolor) {
+    //html生成
+    //base取得
+    var base = document.querySelector('.base');
+    base.setAttribute('style','position: relative;');
+    //chartAreaWrapper作成
+    var chartAreaWrapper = document.createElement("div");
+    chartAreaWrapper.setAttribute('style','overflow-x: scroll;');
+    //yAxisWrapper作成
+    var yAxisWrapper = document.createElement("div");
+    yAxisWrapper.setAttribute('style','position: absolute; left: 0; top: 0; background: linear-gradient(to right, #fff, rgba(255,255,255,0));');
+    //baseにchartAreaWrapper,yAxisWrapperを挿入
+    base.appendChild(chartAreaWrapper);
+    base.appendChild(yAxisWrapper);
+    //cvsChart作成,chartAreaWrapperに挿入
+    const cvsChart = document.createElement("canvas");
+    chartAreaWrapper.appendChild(cvsChart);
+    //cvsYAxis作成,yAxisWrapperに挿入
+    const cvsYAxis = document.createElement("canvas");
+    cvsYAxis.setAttribute('style','position: absolute; left: 0; top: 0; pointer-events:none; background: linear-gradient(to right, #fff, rgba(255,255,255,0));');
+    yAxisWrapper.appendChild(cvsYAxis);
+    
+
+    //cvsChartキャンバス
+    var ctxChart = cvsChart.getContext("2d");
+    // Y軸コピー用 cvsYAxisキャンバス
+    var ctxYAxis = cvsYAxis.getContext("2d");
+
+    var unitWidth = base.dataset.visUnitWidth; // データ当たりの幅を設定 .baseのdata属性
+    var width = labels.length * unitWidth; // グラフ全体の幅を計算
+    chartWidth = width;
+    chartHeight = base.dataset.visHeight;//.baseのdata属性
+    
+
+    cvsChart.style.width = chartWidth + "px"; //　グラフの幅を設定
+    cvsChart.style.height = chartHeight + "px"; //htmlと同じ高さを設定
+
+    //最新データを表示するためのスクロール量
+    chartAreaWrapper.scrollLeft += chartWidth;
+    base.height = chartHeight;
+    
+    // Y軸イメージのコピー関数
+    function copyYAxisImage(chart) {
+        var scale = window.devicePixelRatio;
+        console.log(scale)
+        console.log(chart.scales['y-axis-0']);
+        console.log(chart.scales['x-axis-0']);
+        
+        const yAxisWidth = chart.scales['y-axis-0'].width;
+        const yAxisHeight = chart.scales['y-axis-0'].top + chart.scales['y-axis-0'].height + chart.scales['y-axis-0'].end;
+
+        cvsYAxis.width = (yAxisWidth + 16)  * scale;
+        cvsYAxis.height = (yAxisHeight + chart.scales['x-axis-0'].height) * scale;
+        cvsYAxis.style.width = yAxisWidth + 16 + "px";
+        cvsYAxis.style.height = yAxisHeight + chart.scales['x-axis-0'].height + "px";
+
+        const sWidth = yAxisWidth * scale;
+        const sHeight = yAxisHeight * scale;
+        const dWidth = yAxisWidth;
+        const dHeight = yAxisHeight;
+
+        ctxYAxis.drawImage(cvsChart, 8*scale, 6*scale, sWidth, sHeight, 8*scale, 6*scale, sWidth, sHeight); //16px,12pxの1/2で8px,6px
+        ctxChart.clearRect(8, 6, dWidth, dHeight);
+
+        console.log(chart.scales['y-axis-0']._gridLineItems.ticksLength);
+    }
+
+    Chart.defaults.global.defaultFontColor = '#000000';
+    Chart.defaults.global.defaultFontFamily = "'Heebo', sans-serif";
+    
+    chart = new Chart(ctxChart, {
+        type: 'bar',
+        data:{
+            labels: labels,//更新対象
+            datasets: datasets//更新対象
+        },
+        options: {
+            chartArea: {
+                backgroundColor: '#FAFAF9'
+            },
+            responsive: false, //trueにすると画面の幅に合わせて作図してしまう
+            // aspectRatio: 1,
+            layout: {
+                padding: {
+                    top: 12,
+                    bottom: 8,
+                    right: 16,
+                    left: 16
+                }
+            },
+            title: {
+                display: false,
+            },
+            legend: {
+                display: false,
+            },
+            tooltips:{
+                enabled: false,
+                custom: function(tooltipModel) { //更新対象
+                    // Tooltip Element
+                    var tooltipEl = document.getElementById('chartjs-tooltip');
+
+                    // Create element on first render
+                    if (!tooltipEl) {
+                        tooltipEl = document.createElement('div');
+                        tooltipEl.id = 'chartjs-tooltip';
+                        tooltipEl.innerHTML = '<table></table>';
+                        document.body.appendChild(tooltipEl);
+                    }
+
+                    // Hide if no tooltip
+                    if (tooltipModel.opacity === 0) {
+                        tooltipEl.style.opacity = 0;
+                        return;
+                    }
+
+                    // Set caret Position
+                    tooltipEl.classList.remove('above', 'below', 'no-transform');
+                    if (tooltipModel.yAlign) {
+                        tooltipEl.classList.add(tooltipModel.yAlign);
+                    } else {
+                        tooltipEl.classList.add('no-transform');
+                    }
+
+                    function getBody(bodyItem) {
+                        return bodyItem.lines;
+                    }
+                    // console.log(tooltipItem.index);
+                    // console.log(tooltipModel);
+                    // console.log(tooltipModel.body[0]);
+                    newBody = tooltipModel.body[0].lines[0].split(":");
+                    newBody1 = newBody[1].replace(/[\[\]']+/g ,'');
+                    // console.log(newBpdy1);
+                    newEle = newBody1.split(",");
+                    // console.log(newEle)
+
+                    // Set Text
+                    if (tooltipModel.body) {
+                        // var titleLines = tooltipModel.title || [];
+                        // var title = tooltiplabels[tooltipModel.dataPoints[0].index];
+                        // console.log(tooltiplabels[tooltipModel.dataPoints[0].index])
+                        // console.log(tooltipModel.dataPoints[0].index)
+                        var bodyLines = tooltipModel.body.map(getBody);
+
+                        var innerHtml = '<thead>';
+
+                        bodyLines.forEach(function() {
+                            innerHtml += '<tr><th style="font-size: 14px">' + tooltiplabels[tooltipModel.dataPoints[0].index] + '</th></tr>';
+                        });
+                        innerHtml += '</thead><tbody>';
+
+                        bodyLines.forEach(function(body, i) {
+                            var colors = tooltipModel.labelColors[i];
+                            var style = 'background:' + colors.backgroundColor;
+                            style += '; border-color:' + colors.borderColor;
+                            style += '; border-width: 2px';
+                            var span = '<span style="' + style + '"></span>';
+                            innerHtml += '<tr><td style="font-size: 12px">' + span + newBody[0] + ":" + newEle[0] + " ~ " + newEle[1] + '</td></tr>';
+                        });
+                        innerHtml += '</tbody>';
+
+                        var tableRoot = tooltipEl.querySelector('table');
+                        tableRoot.innerHTML = innerHtml;
+                    }
+
+                    // `this` will be the overall tooltip
+                    var position = this._chart.canvas.getBoundingClientRect();
+
+                    // Display, position, and set styles for font
+                    tooltipEl.style.backgroundColor = '#FFFFFF'
+                    tooltipEl.style.opacity = 0.85;
+                    tooltipEl.style.position = 'absolute';
+                    tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
+                    tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
+                    tooltipEl.style.fontFamily = tooltipModel._bodyFontFamily;
+                    tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px';
+                    tooltipEl.style.fontStyle = tooltipModel._bodyFontStyle;
+                    tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px';
+                    tooltipEl.style.pointerEvents = 'none';
+                }
+            },
+            plugins: {
+                datalabels: {
+                    display: false,
+                    color: '#D32F2F',
+                    align: 'end',
+                    anchor: 'end',
+                    clamp: true,
+                    offset: 0,
+                    // clip: true,
+                    font: {
+                        size: 9.5
+                    },
+                },
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        color: gridcolor, //更新対象
+                        // color: '#EAEAEA',//#EAEAEA
+                        drawTicks: false,
+                        zeroLineColor: '#000000'
+                    },
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 0, //軸ラベルを横にする
+                        minRotation: 0,
+                        padding: 15,// 15がちょうど良い
+                        labelOffset: -7
+                    }
+                }],
+                yAxes: [{
+                    // offset: true,//trueにするとゼロの線が出なくなる
+                    gridLines: {
+                        color: '#EAEAEA',//#EAEAEA
+                        drawTicks: false,
+                        zeroLineColor: '#000000',
+                    },
+                    ticks: {
+                        autoSkip: true,
+                        // maxRotation: 0, //軸ラベルを横にする
+                        // minRotation: 0,
+                        padding: 10,
+                        // fontColor: 'rgba(255,255,255,0)'
+                    },
+                    scaleLabel: {
+                        display: false,
+                        labelString: '坪単価（万円）',
+                        fontColor: '#666666',
+                    }
+                }]
+            },   
+        },
+        plugins: [{
+            // 描画完了後に copyYAxisImage() を呼び出す
+            afterRender: copyYAxisImage,
+
+        }]  
+    });
+    return chart;
+}
+
+//プルダウン
+function change(){
+    document.querySelector('#csv').addEventListener('change', function(e){
+        // console.log(e.target.value);
+        var value = e.target.value;
+        if(String(value).length > 0){
+            var req = new XMLHttpRequest();
+            var filePath = [value + '.csv'];
+            req.open("GET", filePath, true);
+            req.responseType = 'text';
+            req.onload = function () {
+                // CSVデータ変換の呼び出し
+                const data = csv2json(req.responseText);
+                // データ、ラベル、tooltipラベル
+                const datasets = generateDataset(data);
+                const labels = generateLabel(data)
+                const tooltiplabels = generateTooltipLabel(data);
+                const gridcolor = labels.map(function(label) {
+                    if(label != '') {
+                        return '#EAEAEA';
+                    } else {
+                        return '#fff';
+                    }
+                });
+                //データ、ラベル、ツールチップのラベル、軸目盛の色　更新
+                chart.data.datasets = datasets;
+                chart.data.labels = labels;
+                chart.options.scales.xAxes[0].gridLines.color = gridcolor;
+                chart.options.tooltips.custom = function(tooltipModel) {
+                    // Tooltip Element
+                    var tooltipEl = document.getElementById('chartjs-tooltip');
+
+                    // Create element on first render
+                    if (!tooltipEl) {
+                        tooltipEl = document.createElement('div');
+                        tooltipEl.id = 'chartjs-tooltip';
+                        tooltipEl.innerHTML = '<table></table>';
+                        document.body.appendChild(tooltipEl);
+                    }
+
+                    // Hide if no tooltip
+                    if (tooltipModel.opacity === 0) {
+                        tooltipEl.style.opacity = 0;
+                        return;
+                    }
+
+                    // Set caret Position
+                    tooltipEl.classList.remove('above', 'below', 'no-transform');
+                    if (tooltipModel.yAlign) {
+                        tooltipEl.classList.add(tooltipModel.yAlign);
+                    } else {
+                        tooltipEl.classList.add('no-transform');
+                    }
+
+                    function getBody(bodyItem) {
+                        return bodyItem.lines;
+                    }
+                    // console.log(tooltipItem.index);
+                    // console.log(tooltipModel);
+                    // console.log(tooltipModel.body[0]);
+                    newBody = tooltipModel.body[0].lines[0].split(":");
+                    newBpdy1 = newBody[1].replace(/[\[\]']+/g ,'');
+                    // console.log(newBpdy1);
+                    newEle = newBpdy1.split(",");
+                    // console.log(newEle)
+
+                    // Set Text
+                    if (tooltipModel.body) {
+                        // var titleLines = tooltipModel.title || [];
+                        // var title = tooltiplabels[tooltipModel.dataPoints[0].index];
+                        // console.log(tooltiplabels[tooltipModel.dataPoints[0].index])
+                        // console.log(tooltipModel.dataPoints[0].index)
+                        var bodyLines = tooltipModel.body.map(getBody);
+
+                        var innerHtml = '<thead>';
+
+                        bodyLines.forEach(function() {
+                            innerHtml += '<tr><th style="font-size: 14px">' + tooltiplabels[tooltipModel.dataPoints[0].index] + '</th></tr>';
+                        });
+                        innerHtml += '</thead><tbody>';
+
+                        bodyLines.forEach(function(body, i) {
+                            var colors = tooltipModel.labelColors[i];
+                            var style = 'background:' + colors.backgroundColor;
+                            style += '; border-color:' + colors.borderColor;
+                            style += '; border-width: 2px';
+                            var span = '<span style="' + style + '"></span>';
+                            innerHtml += '<tr><td style="font-size: 12px">' + span + newBody[0] + ":" + newEle[0] + " ~ " + newEle[1] + '</td></tr>';
+                        });
+                        innerHtml += '</tbody>';
+
+                        var tableRoot = tooltipEl.querySelector('table');
+                        tableRoot.innerHTML = innerHtml;
+                    }
+
+                    // `this` will be the overall tooltip
+                    var position = this._chart.canvas.getBoundingClientRect();
+
+                    // Display, position, and set styles for font
+                    tooltipEl.style.backgroundColor = '#FFFFFF'
+                    tooltipEl.style.opacity = 0.85;
+                    tooltipEl.style.position = 'absolute';
+                    tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
+                    tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
+                    tooltipEl.style.fontFamily = tooltipModel._bodyFontFamily;
+                    tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px';
+                    tooltipEl.style.fontStyle = tooltipModel._bodyFontStyle;
+                    tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px';
+                    tooltipEl.style.pointerEvents = 'none';
+                }
+                //凡例のDOM更新
+                generateLegend(data);
+                // chart更新
+                chart.update();
+            }
+            req.send(null);
+        }
+    })
+}
+
+

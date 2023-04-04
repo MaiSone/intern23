@@ -1,0 +1,128 @@
+@font-face {
+    font-family: 'Noto Sans JP';
+    src: url('/css/visualdata/Noto_Sans_JP/NotoSansJP-Regular.otf');
+}
+
+.chart_axis__B-zYA {
+    font-family: Noto Sans JP, sans-serif;
+    font-size: .64rem;
+    color: #666;
+    margin-top: 0;
+}
+
+.chart_axis__B-zYA.chart_y__1huGV {
+    font-family: Noto Sans JP, sans-serif;
+    text-align: left
+}
+
+.chart_axis__B-zYA.chart_x__2AUNC {
+    font-family: Noto Sans JP, sans-serif;
+    text-align: right
+}
+
+.chart_title__27gYT {
+    font-family: Noto Sans JP, sans-serif;
+    margin: 0;
+    height: 44px;
+    line-height: 44px;
+    vertical-align: middle;
+    font-size: 1.25rem;
+    font-weight: 600
+}
+
+.chart_label__QWLBr {
+    font-family: Noto Sans JP, sans-serif;
+    margin: 0 0 4px;
+    font-size: .8rem;
+    font-weight: 600;
+    color: #242424
+}
+
+.chart_caption {
+    font-family: Noto Sans JP, sans-serif;
+    margin: 8px;
+    font-size: 14px;
+}
+
+.css-1d3bbye {
+    font-family: "Noto Sans JP";
+    box-sizing: border-box;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    width: 100%;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+
+.css-1wxaqej {
+    box-sizing: border-box;
+    margin: 0;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+
+.legend_legend__24eBL {
+    margin-bottom: 16px;
+    font-size: .938rem
+}
+
+.legend_legend__24eBL,
+.legend_legend__24eBL .legend_legend-item__hVZal {
+    display: -moz-box;
+    display: flex;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    flex-direction: row
+}
+
+.legend_legend__24eBL .legend_legend-item__hVZal {
+    /* height: 28px; */
+    /* padding-right: 12px; */
+    /* -moz-box-align: center; */
+    /* align-items: center; */
+    opacity: 1;
+    -webkit-transition: opacity .2s cubic-bezier(.72, 0, .28, 1);
+    transition: opacity .2s cubic-bezier(.72, 0, .28, 1);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent
+}
+
+.legend_legend__24eBL .legend_legend-item__hVZal .legend_legend-rect__3_0lc {
+    margin-right: 4px;
+    min-width: 16px;
+    min-height: 16px;
+    border-radius: 2px;
+    /* border: 3px solid transparent; */
+    -webkit-transition: border-color .2s cubic-bezier(.72, 0, .28, 1);
+    transition: border-color .2s cubic-bezier(.72, 0, .28, 1)
+}
+
+.legend_legend__24eBL .legend_legend-item__hVZal.legend_hidden__3YwvY {
+    opacity: .25
+}
+
+.legend_legend__24eBL .legend_legend-item__hVZal.legend_hover__1BDc2 {
+    opacity: 1
+}
+
+.legend_legend__24eBL .legend_legend-item__hVZal.legend_select__1r2Pv .legend_legend-rect__3_0lc {
+    border-color: rgba(0, 0, 0, .15)
+}
+
+.legend_legend__24eBL .legend_legend-item__hVZal span {
+    margin-bottom: 1px
+}
+
+@media screen and (min-width:600px) {
+    .legend_legend__24eBL .legend_legend-item__hVZal.legend_hover__1BDc2 {
+        opacity: .8
+    }
+}

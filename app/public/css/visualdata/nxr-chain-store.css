@@ -1,0 +1,110 @@
+/* カテゴリ */
+
+#vis-category {
+    color: #D32F2F;
+    background: #FAFAF9;
+}
+
+.list-category {
+    padding: 5px 6px 5px 6px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.vis-toggle {
+    background: #FAFAF9;
+}
+
+.vis-toggle button {
+    display:inline-block;
+    margin: 0 0 0 1px;
+}
+
+.btn-table, .btn-chart {
+    width: 48%;
+    background: #FAFAF9;
+    padding: 6px 20px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #D32F2F;
+    transition: 0.3s color, 0.3s background, 0.3s opacity;
+    border: 1px solid #D32F2F;
+}
+
+.btn-table:hover, .btn-chart:hover {
+    background: #D32F2F;
+    color: #FFFFFF;
+}
+
+.btn-active {
+    background: #D32F2F;
+    color: #FFFFFF;
+}
+
+.vis-table table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    box-sizing: border-box;
+}
+
+/* マーカー */
+
+table td .incline {
+    background: rgba(0, 0, 0, 0) linear-gradient(transparent 70%, rgba(212, 98, 139, 0.4) 0%) repeat scroll 0 0;
+}
+
+table td .decline {
+    background: rgba(0, 0, 0, 0) linear-gradient(transparent 70%, rgba(87, 169, 215, 0.4) 0%) repeat scroll 0 0;
+}
+
+table th, table td {
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: right;
+    color: #333;
+    padding: 3px 8px;
+    border-width: 1px 0px;
+    border-color: #CCC;
+    border-style: solid;
+}
+
+table th {
+    font-weight: 600;
+    border: 1px solid #CCC;
+    text-align: center;
+    background: #52A69F;
+    color: #FFFFFF;
+}
+
+/* 表ヘッダー縦書き */
+
+.vertical-header table {
+    table-layout: auto;
+}
+.vertical-header table th, .vertical-header table td {
+    white-space: nowrap;
+}
+
+.vertical-header table th span {
+    -webkit-writing-mode: vertical-rl;
+    -moz-writing-mode: vertical-rl;
+    -ms-writing-mode: tb-rl;
+    -ms-writing-mode: vertical-rl;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    min-height: 10em;
+}
+
+/* ヘッダー固定 */
+
+.vis-table {
+    max-height: 500px;
+    overflow: auto;
+    display: none;
+}
+
+table thead th, table thead td {
+    position: sticky;
+    top: 0;
+}
